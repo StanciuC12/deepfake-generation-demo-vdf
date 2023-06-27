@@ -18,7 +18,7 @@ class LandMarkDetector:
 
     return np.array(points)
 
-  def crop_square(self, img, face_points, final_dim=(299, 299)):
+  def crop_square(self, img, face_points, final_dim=(256, 256)):
 
     minx, maxx, miny, maxy = int(np.min(face_points[:, 1])), int(np.max(face_points[:, 1])), int(np.min(face_points[:, 0])), int(np.max(face_points[:, 0]))
     sides = [maxy - miny, maxx - minx]
@@ -53,7 +53,7 @@ class LandMarkDetector:
     Y, X = skimage.draw.polygon(face_borders[:, 1], face_borders[:, 0])
     blacked_img = np.zeros(img.shape, dtype=np.uint8)
     blacked_img[Y, X] = img[Y, X]
-    cropped_img = self.crop_square(blacked_img, face_borders, final_dim=(299, 299))
+    cropped_img = self.crop_square(blacked_img, face_borders, final_dim=(256, 256))
     cv2.imwrite(os.path.join(self.save_path_folder, f'{img_name}.png'), cropped_img)
 
     return cropped_img
