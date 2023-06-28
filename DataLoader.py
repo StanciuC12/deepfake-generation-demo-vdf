@@ -36,9 +36,9 @@ class DataLoader:
     self.class_files = [[x for x in self.files if y in x] for y in classes]
     self.transform = transforms.Compose([
                     transforms.ToTensor(),
-                    transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
+                    #transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
                     ])
-    self.min_batches_each_class = min([len(x) for x in self.class_files])
+    self.min_batches_each_class = min([len(x) for x in self.class_files])//self.batch_size
 
   def shuffle_data(self):
 

@@ -11,6 +11,10 @@ class LandMarkDetector:
     self.detector = dlib.get_frontal_face_detector()
     self.predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
     self.save_path_folder = 'out'
+    try:
+        os.mkdir(self.save_path_folder)
+    except:
+        pass
 
   def get_landmarks(self, img):
 
