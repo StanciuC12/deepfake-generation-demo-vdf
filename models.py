@@ -33,15 +33,15 @@ class Encoder(nn.Module):
 
 class Decoder(nn.Module):
     def __init__(self):
-        super(Decoder, self).__init__()
+        super().__init__()
 
         ## a kernel of 2 and a stride of 2 will increase the spatial dims by 2
-        self.t_conv1 = nn.ConvTranspose2d(1024, 512, 3, stride=2)
-        self.t_conv2 = nn.ConvTranspose2d(512, 256, 3, stride=2)
-        self.t_conv3 = nn.ConvTranspose2d(256, 128, 3, stride=2)
-        self.t_conv4 = nn.ConvTranspose2d(128, 64, 3, stride=2)
-        self.t_conv5 = nn.ConvTranspose2d(64, 64, 3, stride=2)
-        self.t_conv6 = nn.ConvTranspose2d(64, 3, 4, stride=2)
+        self.t_conv1 = nn.ConvTranspose2d(512, 256, 2, stride=2)
+        self.t_conv2 = nn.ConvTranspose2d(256, 128, 2, stride=2)
+        self.t_conv3 = nn.ConvTranspose2d(128, 128, 2, stride=2)
+        self.t_conv4 = nn.ConvTranspose2d(128, 64, 2, stride=2)
+        self.t_conv5 = nn.ConvTranspose2d(64, 64, 2, stride=2)
+        self.t_conv6 = nn.ConvTranspose2d(64, 3, 2, stride=2)
 
     def forward(self, x):
 
@@ -56,6 +56,34 @@ class Decoder(nn.Module):
         x = F.sigmoid(self.t_conv6(x))
 
         return x
+
+
+
+# class Decoder(nn.Module):
+#     def __init__(self):
+#         super(Decoder, self).__init__()
+#
+#         ## a kernel of 2 and a stride of 2 will increase the spatial dims by 2
+#         self.t_conv1 = nn.ConvTranspose2d(1024, 512, 2, stride=2)
+#         self.t_conv2 = nn.ConvTranspose2d(512, 256, 2, stride=2)
+#         self.t_conv3 = nn.ConvTranspose2d(256, 128, 2, stride=2)
+#         self.t_conv4 = nn.ConvTranspose2d(128, 64, 2, stride=2)
+#         self.t_conv5 = nn.ConvTranspose2d(64, 64, 2, stride=2)
+#         self.t_conv6 = nn.ConvTranspose2d(64, 3, 2, stride=2)
+#
+#     def forward(self, x):
+#
+#         ## decode ##
+#         # add transpose conv layers, with relu activation function
+#         x = F.relu(self.t_conv1(x))
+#         x = F.relu(self.t_conv2(x))
+#         x = F.relu(self.t_conv3(x))
+#         x = F.relu(self.t_conv4(x))
+#         x = F.relu(self.t_conv5(x))
+#         # output layer (with sigmoid for scaling from 0 to 1)
+#         x = F.sigmoid(self.t_conv6(x))
+#
+#         return x
 
 
 
