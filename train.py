@@ -49,17 +49,17 @@ for epoch in range(1, n_epochs + 1):
     ###################
     for i in range(nr_batches):
         print(f'{str(i)}/{str(nr_batches)}')
-        images_c0 = data_loader.get_data(class_nr=0, batch_nr=i).to(device)
+        images_c1 = data_loader.get_data(class_nr=0, batch_nr=i).to(device)
 
         # clear the gradients of all optimized variables
         optimizer_e.zero_grad()
         optimizer_d1.zero_grad()
 
         # forward pass: compute predicted outputs by passing inputs to the model
-        out1 = d1(e(images_c0))
+        out1 = d1(e(images_c1))
 
         # calculate the loss
-        loss1 = criterion(out1, images_c0)
+        loss1 = criterion(out1, images_c1)
 
         # backward pass: compute gradient of the loss with respect to model parameters
         loss1.backward()
@@ -67,17 +67,17 @@ for epoch in range(1, n_epochs + 1):
         optimizer_e.step()
         optimizer_d1.step()
         # update running training loss
-        train_loss += loss1.item() * images_c0.size(0)
+        train_loss += loss1.item() * images_c1.size(0)
 
-        images_c1 = data_loader.get_data(class_nr=1, batch_nr=i).to(device)
+        images_c2 = data_loader.get_data(class_nr=1, batch_nr=i).to(device)
         optimizer_e.zero_grad()
         optimizer_d2.zero_grad()
-        out2 = d2(e(images_c1))
-        loss2 = criterion(out2, images_c1)
+        out2 = d2(e(images_c2))
+        loss2 = criterion(out2, images_c2)
         loss2.backward()
         optimizer_e.step()
         optimizer_d2.step()
-        train_loss += loss2.item() * images_c1.size(0)
+        train_loss += loss2.item() * images_c2.size(0)
 
     # print avg training statistics
     train_loss = train_loss / nr_batches

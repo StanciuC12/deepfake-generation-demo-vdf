@@ -79,7 +79,8 @@ class LandMarkDetector:
 
       except Exception as e:
         failed += 1
-        print('FAILED #', failed)
+        if failed > 5:
+            print('FAILED #', failed)
         #print(e)
 
         if failed > 10:
