@@ -35,7 +35,7 @@ class DataLoader:
     random.shuffle(self.files)
     self.class_files = [[x for x in self.files if y in x] for y in classes]
     self.transform = transforms.Compose([
-                    transforms.ToTensor(dtype=torch.float64),
+                    transforms.ToTensor(),
                     ])
     self.min_batches_each_class = min([len(x) for x in self.class_files])//self.batch_size
 
@@ -54,7 +54,7 @@ class DataLoader:
       img = self.transform(img)
       imgs.append(img)
 
-    return torch.stack(imgs).reshape(-1, 3, 256, 256)
+    return torch.stack(imgs).reshape(-1, 3, 256, 256).type(torch.DoubleTensor)
 
 
 
