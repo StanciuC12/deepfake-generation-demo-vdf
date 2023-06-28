@@ -12,7 +12,7 @@ class Encoder(nn.Module):
         super(Encoder, self).__init__()
         self.conv1 = nn.Conv2d(3, 128, 3, padding=1, stride=2)
         self.conv2 = nn.Conv2d(128, 256, 2, padding=1, stride=2)
-        self.conv3 = nn.Conv2d(256, 1024, 2, padding=1, stride=2)
+        self.conv3 = nn.Conv2d(256, 512, 2, padding=1, stride=2)
         self.conv4 = nn.Conv2d(512, 1024, 2, padding=1, stride=2)
         # pooling layer to reduce x-y dims by two; kernel and stride of 2
         self.pool = nn.MaxPool2d(2, 2)
