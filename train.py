@@ -19,12 +19,13 @@ for video_adr in video_adrs:
 
 
 # initialize parameters, data loader, models
+device = 'cuda'
 e = Encoder()
-e.to('cuda')
+e.to(device)
 d1 = Decoder()
-d1.to('cuda')
+d1.to(device)
 d2 = Decoder()
-d2.to('cuda')
+d2.to(device)
 
 # parameters###############################################
 n_epochs = 20
@@ -48,7 +49,7 @@ for epoch in range(1, n_epochs + 1):
     ###################
     for i in range(nr_batches):
         print(f'{str(i)}/{str(nr_batches)}')
-        images_c0 = data_loader.get_data(class_nr=0, batch_nr=i).to('cuda')
+        images_c0 = data_loader.get_data(class_nr=0, batch_nr=i).to(device)
 
         # clear the gradients of all optimized variables
         optimizer_e.zero_grad()
@@ -59,7 +60,6 @@ for epoch in range(1, n_epochs + 1):
 
         # calculate the loss
         loss1 = criterion(out1, images_c0)
-        break
 
         # backward pass: compute gradient of the loss with respect to model parameters
         loss1.backward()
@@ -69,7 +69,7 @@ for epoch in range(1, n_epochs + 1):
         # update running training loss
         train_loss += loss1.item() * images_c0.size(0)
 
-        images_c1 = data_loader.get_data(class_nr=1, batch_nr=i).to('cuda')
+        images_c1 = data_loader.get_data(class_nr=1, batch_nr=i).to(device)
         optimizer_e.zero_grad()
         optimizer_d2.zero_grad()
         out2 = d2(e(images_c1))
@@ -79,10 +79,17 @@ for epoch in range(1, n_epochs + 1):
         optimizer_d2.step()
         train_loss += loss2.item() * images_c1.size(0)
 
-    break
     # print avg training statistics
     train_loss = train_loss / nr_batches
     print('Epoch: {} \tTraining Loss: {:.6f}'.format(
         epoch,
         train_loss
     ))
+
+    # Saving models
+    torch.save(e.state_dict(), f'encoder_e{str(epoch)}.pkl')
+    torch.save(d1.state_dict(), f'decoder1_e{str(epoch)}.pkl')
+    torch.save(d2.state_dict(), f'decoder2_e{str(epoch)}.pkl')
+
+
+# Evaluation
