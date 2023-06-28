@@ -7,56 +7,56 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch
 
-class Encoder(nn.Module):
-    def __init__(self):
-        super(Encoder, self).__init__()
-        self.conv1 = nn.Conv2d(3, 128, 3, padding=1, stride=2)
-        self.conv2 = nn.Conv2d(128, 256, 2, padding=1, stride=2)
-        self.conv3 = nn.Conv2d(256, 512, 2, padding=1, stride=2)
-        self.conv4 = nn.Conv2d(512, 1024, 2, padding=1, stride=2)
-        # pooling layer to reduce x-y dims by two; kernel and stride of 2
-        self.pool = nn.MaxPool2d(2, 2)
-
-
-    def forward(self, x):
-        ## encode ##
-        # add hidden layers with relu activation function
-        x = F.relu(self.conv1(x))
-        x = self.pool(x)
-        x = F.relu(self.conv2(x))
-        x = self.pool(x)
-        x = F.relu(self.conv3(x))
-        x = self.pool(x)
-        x = F.relu(self.conv4(x)) #compressed representation
-
-        return x
-
-class Decoder(nn.Module):
-    def __init__(self):
-        super().__init__()
-
-        ## a kernel of 2 and a stride of 2 will increase the spatial dims by 2
-        self.t_conv1 = nn.ConvTranspose2d(1024, 512, 2, stride=2)
-        self.t_conv2 = nn.ConvTranspose2d(512, 256, 2, stride=2)
-        self.t_conv3 = nn.ConvTranspose2d(256, 128, 2, stride=2)
-        self.t_conv4 = nn.ConvTranspose2d(128, 128, 2, stride=2)
-        self.t_conv5 = nn.ConvTranspose2d(128, 64, 2, stride=2)
-        self.t_conv6 = nn.ConvTranspose2d(64, 3, 2, stride=2)
-
-    def forward(self, x):
-
-        ## decode ##
-        # add transpose conv layers, with relu activation function
-        x = F.relu(self.t_conv1(x))
-        x = F.relu(self.t_conv2(x))
-        x = F.relu(self.t_conv3(x))
-        x = F.relu(self.t_conv4(x))
-        x = F.relu(self.t_conv5(x))
-        # output layer (with sigmoid for scaling from 0 to 1)
-        x = F.sigmoid(self.t_conv6(x))
-
-        return x
-
+# class Encoder(nn.Module):
+#     def __init__(self):
+#         super(Encoder, self).__init__()
+#         self.conv1 = nn.Conv2d(3, 128, 3, padding=1, stride=2)
+#         self.conv2 = nn.Conv2d(128, 256, 2, padding=1, stride=2)
+#         self.conv3 = nn.Conv2d(256, 512, 2, padding=1, stride=2)
+#         self.conv4 = nn.Conv2d(512, 1024, 2, padding=1, stride=2)
+#         # pooling layer to reduce x-y dims by two; kernel and stride of 2
+#         self.pool = nn.MaxPool2d(2, 2)
+#
+#
+#     def forward(self, x):
+#         ## encode ##
+#         # add hidden layers with relu activation function
+#         x = F.relu(self.conv1(x))
+#         x = self.pool(x)
+#         x = F.relu(self.conv2(x))
+#         x = self.pool(x)
+#         x = F.relu(self.conv3(x))
+#         x = self.pool(x)
+#         x = F.relu(self.conv4(x)) #compressed representation
+#
+#         return x
+#
+# class Decoder(nn.Module):
+#     def __init__(self):
+#         super().__init__()
+#
+#         ## a kernel of 2 and a stride of 2 will increase the spatial dims by 2
+#         self.t_conv1 = nn.ConvTranspose2d(1024, 512, 2, stride=2)
+#         self.t_conv2 = nn.ConvTranspose2d(512, 256, 2, stride=2)
+#         self.t_conv3 = nn.ConvTranspose2d(256, 128, 2, stride=2)
+#         self.t_conv4 = nn.ConvTranspose2d(128, 128, 2, stride=2)
+#         self.t_conv5 = nn.ConvTranspose2d(128, 64, 2, stride=2)
+#         self.t_conv6 = nn.ConvTranspose2d(64, 3, 2, stride=2)
+#
+#     def forward(self, x):
+#
+#         ## decode ##
+#         # add transpose conv layers, with relu activation function
+#         x = F.relu(self.t_conv1(x))
+#         x = F.relu(self.t_conv2(x))
+#         x = F.relu(self.t_conv3(x))
+#         x = F.relu(self.t_conv4(x))
+#         x = F.relu(self.t_conv5(x))
+#         # output layer (with sigmoid for scaling from 0 to 1)
+#         x = F.sigmoid(self.t_conv6(x))
+#
+#         return x
+#
 
 
 # class Decoder(nn.Module):
@@ -85,6 +85,67 @@ class Decoder(nn.Module):
 #
 #         return x
 
+class Encoder(nn.Module):
+    def __init__(self):
+        super(Encoder, self).__init__()
+        self.conv1 = nn.Conv2d(3, 128, 3, padding=1, stride=2)
+        self.conv2 = nn.Conv2d(128, 256, 2, padding=1, stride=2)
+        self.conv3 = nn.Conv2d(256, 512, 2, padding=1, stride=2)
+        self.conv4 = nn.Conv2d(512, 1024, 2, stride=2)
+        # pooling layer to reduce x-y dims by two; kernel and stride of 2
+        self.pool = nn.MaxPool2d(2, 2)
+
+
+    def forward(self, x):
+        ## encode ##
+        # add hidden layers with relu activation function
+        x = F.relu(self.conv1(x))
+        x = self.pool(x)
+        x = F.relu(self.conv2(x))
+        x = self.pool(x)
+        x = F.relu(self.conv3(x))
+        x = self.pool(x)
+        x = F.relu(self.conv4(x)) #compressed representation
+
+
+        return x
+
+class Decoder(nn.Module):
+    def __init__(self):
+        super().__init__()
+
+        ## a kernel of 2 and a stride of 2 will increase the spatial dims by 2
+        self.conv1 = nn.Conv2d(1024, 512, 3, padding=1)
+        self.conv2 = nn.Conv2d(512, 256, 3, padding=1)
+        self.conv3 = nn.Conv2d(256, 128, 5, padding=2)
+        self.conv4 = nn.Conv2d(128, 3, 5, padding=2)
+        self.up = nn.Upsample(scale_factor=2, mode='nearest')
+        self.up4 = nn.Upsample(scale_factor=4, mode='nearest')
+
+    def forward(self, x):
+
+        ## decode ##
+        # add transpose conv layers, with relu activation function
+        #print(x.shape) #2
+        x = self.up(x)
+        #print(x.shape) #4
+        x = F.relu(self.conv1(x))
+        #print(x.shape) #4
+        x = self.up4(x)
+        #print(x.shape) #16
+        x = F.relu(self.conv2(x))
+        #print(x.shape) #16
+        x = self.up4(x)
+        #print(x.shape) #64
+        x = F.relu(self.conv3(x))
+        #print(x.shape) #64
+        x = self.up4(x)
+        #print(x.shape) #256
+        # output layer (with sigmoid for scaling from 0 to 1)
+        x = F.sigmoid(self.conv4(x))
+
+
+        return x
 
 
 

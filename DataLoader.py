@@ -56,6 +56,13 @@ class DataLoader:
 
     return torch.stack(imgs).reshape(-1, 3, 256, 256)
 
+  def get_photo(self, photo_adr):
+
+      img = cv2.imread(photo_adr)
+      img = self.transform(img)
+
+      return img.reshape(1, 3, 256, 256)
+
 
 
 if __name__ == '__main__':
