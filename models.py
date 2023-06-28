@@ -2,7 +2,7 @@
 # !git clone https://github.com/StanciuC12/deepfake-generation-demo-vdf.git
 # %cd deepfake-generation-demo-vdf
 
-from LandMarkDetector import LandMarkDetector
+#from LandMarkDetector import LandMarkDetector
 import torch.nn as nn
 import torch.nn.functional as F
 import torch

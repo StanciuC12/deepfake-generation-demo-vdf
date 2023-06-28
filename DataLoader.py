@@ -17,7 +17,7 @@ Original file is located at
 #   video_adr = os.path.join('videos', 'id31_0005.mp4')
 #   detector.video2croppedImages(video_path=video_adr, name_prefix=file.split('.')[0])
 
-from LandMarkDetector import LandMarkDetector
+#from LandMarkDetector import LandMarkDetector
 import os
 import random
 from torchvision import transforms
@@ -54,7 +54,7 @@ class DataLoader:
       img = self.transform(img)
       imgs.append(img)
 
-    return torch.stack(imgs).reshape(-1, 3, 256, 256).type(torch.DoubleTensor)
+    return torch.stack(imgs).reshape(-1, 3, 256, 256)
 
 
 
